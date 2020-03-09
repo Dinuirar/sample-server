@@ -1,0 +1,27 @@
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - SAMPLE IGLUNA 2020</title>
+        {% else %}
+        <title>SAMPLE</title>
+        {% endif %}
+    </head>
+    <body>
+        <div>
+            <a href="/index">Main page</a>
+            <a href="/telecommands">Telecommands</a>
+            <a href="/telemetry">Telemetry</a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
