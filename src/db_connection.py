@@ -32,7 +32,7 @@ class Database:
                 "LIMIT 1;"
         self.data.execute(query)
         (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) = self.data.fetchone()
-        return (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater)
+        return gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater
 
     def get_telecommands_history(self):
         query = "SELECT * FROM telecommands"
