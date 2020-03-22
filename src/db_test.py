@@ -16,4 +16,10 @@ tm.heater = 1
 db.add_telemetry(tm)
 db.add_telecommand('TURN ON HEATER')
 db.print_telecommands_history()
-db.print_telemetry()
+db.print_telemetry_history()
+
+(gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) = db.get_telemetry()
+print(f'last telemetry packet gathered on {gathered_time}\n'
+      f'humidity: {humidity}, temperature: {temperature}, pressure: {pressure}\n'
+      f'luminosity: {luminosity}, lamps: {lamps}, airfan: {airfan}\n'
+      f'heater: {heater}')

@@ -19,16 +19,26 @@ class Database:
                                                   database=self.database_name)
             self.data = self.cnx.cursor()
         except Error as err:
-            print("unhandled connection error")
+            print("Unhandled connection error. Quitting application.")
+            quit()
 
     def __del__(self):
         self.cnx.close()
+
+    def get_telemetry(self):
+        query = "SELECT * FROM telemetry " \
+                "WHERE TRUE "\
+                "ORDER BY gathered_time DESC " \
+                "LIMIT 1;"
+        self.data.execute(query)
+        (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) = self.data.fetchone()
+        return (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater)
 
     def get_telecommands_history(self):
         query = "SELECT * FROM telecommands"
         self.data.execute(query)
 
-    def get_telemetry(self):
+    def get_telemetry_history(self):
         query = "SELECT * FROM telemetry"
         self.data.execute(query)
 
@@ -37,8 +47,8 @@ class Database:
         for (receive_time, telecommand, executed) in self.data:
             print(f"{receive_time}, {telecommand}, {executed}")
 
-    def print_telemetry(self):
-        self.get_telemetry()
+    def print_telemetry_history(self):
+        self.get_telemetry_history()
         for (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) in self.data:
             print(f"{gathered_time}, {humidity}, {temperature}, {pressure}, {luminosity}, {lamps}, {airfan}, {heater}")
 
