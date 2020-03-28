@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect
 from src import app
 from src.forms import TelecommandForm
-from src.db_connection import Database
+from src.database import Database
 from datetime import datetime
 
 
@@ -25,20 +25,25 @@ def telecommands():
 @app.route('/telemetry')
 def telemetry():
     db = Database()
-    (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) = db.get_telemetry()
+    tm = db.get_telemetry()
     return render_template('telemetry.html', title='telemetry',
-                           gathered_time=gathered_time, humidity=humidity, temperature=temperature, pressure=pressure,
-                           luminosity=luminosity, lamps=lamps, airfan=airfan, heater=heater)
+                           gathered_time=tm.timestamp,
+                           humidity=tm.humidity,
+                           temperature=tm.temperature,
+                           pressure=tm.pressure,
+                           luminosity=tm.luminosity,
+                           lamps=tm.lamps,
+                           airfan=tm.airfan,
+                           heater=tm.heater)
 
 
 @app.route('/photo')
 def photo():
     gathered_time = datetime.now()
     # TODO: take a photo
-    # TODO: take a proper filename
-    img_path = '/static/example.png'
+    # TODO: assign a proper filename to img path
+    img_path = '/static/' + 'example.png'
     return render_template('photo.html',
                            title='photo',
                            gathered_time=gathered_time,
                            img_path=img_path)
-

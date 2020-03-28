@@ -1,6 +1,7 @@
 from mysql.connector import connection
 from mysql.connector import Error
 from datetime import datetime
+from src.telemetry import Telemetry
 
 
 class Database:
@@ -9,21 +10,24 @@ class Database:
         self.password = 'user'
         self.host_address = '127.0.0.1'
         self.database_name = 'mydb'
-        self.data = ''
         self.cnx = connection.MySQLConnection()
+        self.data = None
 
         try:
-            self.cnx = connection.MySQLConnection(user=self.username,
-                                                  password=self.password,
-                                                  host=self.host_address,
-                                                  database=self.database_name)
-            self.data = self.cnx.cursor()
+            self.connect()
         except Error as err:
-            print("Unhandled connection error. Quitting application.")
-            quit()
+            print("Unhandled connection error.")
+            raise Error
 
     def __del__(self):
         self.cnx.close()
+
+    def connect(self):
+        self.cnx = connection.MySQLConnection(user=self.username,
+                                              password=self.password,
+                                              host=self.host_address,
+                                              database=self.database_name)
+        self.data = self.cnx.cursor()
 
     def get_telemetry(self):
         query = "SELECT * FROM telemetry " \
@@ -32,7 +36,52 @@ class Database:
                 "LIMIT 1;"
         self.data.execute(query)
         (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) = self.data.fetchone()
-        return gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater
+        tm = Telemetry()
+        tm.set(humidity=humidity,
+               temperature=temperature,
+               pressure=pressure,
+               luminosity=luminosity,
+               lamps=lamps,
+               airfan=airfan,
+               heater=heater,
+               timestamp=gathered_time)
+        return tm
+
+    def add_telecommand(self, tc_string):
+        query = self.build_tc_query(tc_string)
+        self.add_data(query)
+
+    def add_telemetry(self, tm):
+        query = self.build_tm_query(tm)
+        self.add_data(query)
+
+    def add_data(self, query):
+        self.data.execute(query)
+        self.cnx.commit()
+
+    @staticmethod
+    def build_tc_query(tc_string):
+        default = 'FALSE'  # other value: TRUE
+        timestamp = Database.now()
+        query = f'INSERT INTO telecommands(receive_time, telecommand, executed) '\
+                f'VALUES (\'{timestamp}\', \'{tc_string}\', {default});'
+        return query
+
+    @staticmethod
+    def build_tm_query(tm):
+        timestamp = Database.now()
+        query = f'INSERT INTO telemetry('\
+                f'gathered_time, '\
+                f'humidity, temperature, pressure, luminosity, lamps, airfan, heater) '\
+                f'VALUES '\
+                f'(\'{timestamp}\', '\
+                f'{tm.humidity}, {tm.temperature}, {tm.pressure}, ' \
+                f'{tm.luminosity}, {tm.lamps}, {tm.airfan}, {tm.heater});'
+        return query
+
+    @staticmethod
+    def now():
+        return datetime.now()
 
     def get_telecommands_history(self):
         query = "SELECT * FROM telecommands"
@@ -51,35 +100,3 @@ class Database:
         self.get_telemetry_history()
         for (gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater) in self.data:
             print(f"{gathered_time}, {humidity}, {temperature}, {pressure}, {luminosity}, {lamps}, {airfan}, {heater}")
-
-    def add_telecommand(self, tc_string):
-        query = self.build_tc_query(tc_string)
-        self.add_data(query)
-
-    def add_telemetry(self, tm):
-        query = self.build_tm_query(tm)
-        self.add_data(query)
-
-    def add_data(self, query):
-        self.data.execute(query)
-        self.cnx.commit()
-
-    @staticmethod
-    def build_tc_query(tc_string):
-        default = 'FALSE'  # other value: TRUE
-        timestamp = datetime.now()
-        query = f'INSERT INTO telecommands(receive_time, telecommand, executed) '\
-                f'VALUES (\'{timestamp}\', \'{tc_string}\', {default});'
-        return query
-
-    @staticmethod
-    def build_tm_query(tm):
-        timestamp = datetime.now()
-        query = f'INSERT INTO telemetry('\
-                f'gathered_time, '\
-                f'humidity, temperature, pressure, luminosity, lamps, airfan, heater) '\
-                f'VALUES '\
-                f'(\'{timestamp}\', '\
-                f'{tm.humidity}, {tm.temperature}, {tm.pressure}, ' \
-                f'{tm.luminosity}, {tm.lamps}, {tm.airfan}, {tm.heater});'
-        return query

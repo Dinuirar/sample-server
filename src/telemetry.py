@@ -7,3 +7,14 @@ class Telemetry:
         self.lamps = 0
         self.airfan = 0
         self.heater = 0
+        self.timestamp = 0
+
+    def set(self, humidity, temperature, pressure, luminosity, lamps, airfan, heater, timestamp):
+        self.humidity = humidity
+        self.temperature = temperature
+        self.pressure = pressure
+        self.luminosity = luminosity
+        self.lamps = lamps
+        self.airfan = airfan
+        self.heater = heater
+        self.timestamp = timestamp
