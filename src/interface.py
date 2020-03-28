@@ -47,3 +47,8 @@ def photo():
                            title='photo',
                            gathered_time=gathered_time,
                            img_path=img_path)
+
+
+@app.route('/error_log')
+def error_log():
+    return render_template('error_log.html', title='error log')

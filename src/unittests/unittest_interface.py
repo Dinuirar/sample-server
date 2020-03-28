@@ -36,6 +36,10 @@ class InterfaceTests(unittest.TestCase):
         result = self.app.get('/photo')
         self.assertEqual(result.status_code, self.HTTP_OK)
 
+    def test_error_log_online(self) -> None:
+        result = self.app.get('/error_log')
+        self.assertEqual(result.status_code, self.HTTP_OK)
+
 
 if __name__ == '__main__':
     unittest.main()
