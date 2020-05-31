@@ -18,3 +18,16 @@ class Telemetry:
         self.airfan = airfan
         self.heater = heater
         self.timestamp = timestamp
+
+    def serialize(self):
+        JSONed = {
+            'humidity': self.humidity,
+            'temperature': self.temperature,
+            'pressure': self.pressure,
+            'luminosity': self.luminosity,
+            'lamps': self.lamps,
+            'airfans': self.airfan,
+            'heaters': self.heater,
+            'timestamp': str(self.timestamp)
+        }
+        return JSONed
