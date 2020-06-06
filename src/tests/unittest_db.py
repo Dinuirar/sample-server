@@ -1,10 +1,10 @@
-import unittest
+from unittest import TestCase, main
 from src.database import Database
 from mysql.connector import Error
 from src.telemetry import Telemetry
 
 
-class TestDBConnection(unittest.TestCase):
+class TestDBConnection(TestCase):
     def test_connect(self) -> None:
         try:
             self.database = Database()
@@ -12,7 +12,7 @@ class TestDBConnection(unittest.TestCase):
             self.fail("DB not connected!!")
 
 
-class TestDatabaseClass(unittest.TestCase):
+class TestDatabaseClass(TestCase):
     def setUp(self) -> None:
         self.database = Database()
 
@@ -52,8 +52,12 @@ class TestDatabaseClass(unittest.TestCase):
         tm.set(humidity=20, temperature=0, pressure=800, luminosity=0.5, lamps=2,
                airfan=3, heater=1, timestamp=self.database.now())
         self.assertRegex(self.database.build_tm_query(tm),
-                         'INSERT INTO telemetry.* VALUES.*')
+                         f'INSERT INTO telemetry('
+                         f'gathered_time, humidity, temperature, pressure, luminosity, lamps, airfan, heater, tm_id) '
+                         f'VALUES '
+                         f'(\'{tm.timestamp}\', '
+                         f'20, 0, 800, 0.5, 2, 3, 1, 10);')
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

@@ -1,5 +1,4 @@
 from threading import Thread
-import subprocess
 from src import app
 
 
@@ -10,5 +9,4 @@ class InterfaceThread(Thread):
         self.name = name
 
     def run(self) -> None:
-        subprocess.Popen("net start MySQL82", shell=True, stdout=subprocess.PIPE)
         app.run(host='0.0.0.0', port=80)

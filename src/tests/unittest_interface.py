@@ -1,8 +1,8 @@
+from unittest import TestCase, main
 from src import app
-import unittest
 
 
-class InterfaceTests(unittest.TestCase):
+class InterfaceTests(TestCase):
     HTTP_OK = 200
 
     @classmethod
@@ -25,11 +25,11 @@ class InterfaceTests(unittest.TestCase):
         self.assertEqual(result.status_code, self.HTTP_OK)
 
     def test_telecommands_online(self) -> None:
-        result = self.app.get('/telecommands')
+        result = self.app.post('/post_telecommand')
         self.assertEqual(result.status_code, self.HTTP_OK)
 
     def test_telemetry_online(self) -> None:
-        result = self.app.get('/telemetry')
+        result = self.app.get('/get_telemetry')
         self.assertEqual(result.status_code, self.HTTP_OK)
 
     def test_photo_online(self) -> None:
@@ -42,4 +42,4 @@ class InterfaceTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

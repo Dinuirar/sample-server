@@ -1,8 +1,8 @@
-import unittest
+from unittest import TestCase, main
 from src.controller import Controller
 
 
-class TestController(unittest.TestCase):
+class TestController(TestCase):
     def setUp(self) -> None:
         self.controller = Controller()
 
@@ -14,4 +14,4 @@ class TestController(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

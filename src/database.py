@@ -1,7 +1,7 @@
+from datetime import datetime
 from mysql.connector import connection
 from mysql.connector import Error
 from src.telemetry import Telemetry
-from datetime import datetime
 
 
 class Database:
