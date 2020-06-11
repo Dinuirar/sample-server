@@ -52,8 +52,8 @@ class Controller:
         print("taking photo: " + photo_name)
 
         # TODO
-        origin = 'src\\static\\example.png'
-        target = f'src\\static\\{photo_name}'
+        origin = 'src/static/example.png'
+        target = f'src/static/{photo_name}'
         shutil.copyfile(origin, target)
 
         print("photo taken")
