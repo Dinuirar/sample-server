@@ -2,6 +2,7 @@ from time import sleep
 from datetime import datetime
 from src.database import Database
 from src.telemetry import Telemetry
+from src.bme280 import readBME280All
 import shutil
 import os
 
@@ -12,6 +13,8 @@ class Controller:
     pressure = 15
     airfan = 0
     lamps = 1
+    luminosity = 0
+    heaters = 0
 
     def __init__(self) -> None:
         self.database = Database()
@@ -60,19 +63,16 @@ class Controller:
 
     @staticmethod
     def take_telemetry() -> Telemetry:
-        # TODO
-        Controller.humidity = Controller.humidity + 1
-        Controller.temperature = Controller.temperature + 1
-        Controller.pressure = Controller.pressure + 1
+        Controller.temperature, Controller.pressure, Controller.humidity = readBME280All()
 
         tm = Telemetry()
         tm.set(humidity=Controller.humidity,
                temperature=Controller.temperature,
                pressure=Controller.pressure,
-               luminosity=0.0,
+               luminosity=Controller.luminosity,
                lamps=Controller.lamps,
                airfan=Controller.airfan,
-               heater=0,
+               heater=Controller.heaters,
                timestamp=datetime.now())
 
         return tm
