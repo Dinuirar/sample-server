@@ -82,8 +82,11 @@ class Database:
         self.add_data(query)
 
     def add_data(self, query: str) -> None:
-        self.cursor.execute(query)
-        self.cnx.commit()
+        try:
+            self.cursor.execute(query)
+            self.cnx.commit()
+        except Error:
+            print("error adding data")
 
     def build_tc_query(self, tc_string) -> str:
         was_executed = 'FALSE'
@@ -144,6 +147,6 @@ class Database:
             photo_id = data[0]
         else:
             photo_id = 0
-        photo_name = "sample_photo" + str(photo_id) + ".png"
+        photo_name = "sample_photo" + str(photo_id) + ".jpg"
 
         return photo_name

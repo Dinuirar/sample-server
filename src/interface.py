@@ -21,7 +21,7 @@ def photo():
     print("photo requested")
     db = Database()
     db.add_telecommand("TAKE PHOTO")
-    sleep(1.5)
+    sleep(3)
     img_path = f"static/{db.get_last_photo_name()}"
 
     return send_file(img_path, mimetype='image/gif')

@@ -47,17 +47,20 @@ class Controller:
             pass
         elif tc == "TURN OFF AIRFAN":
             pass
+        elif tc == "shutdown":
+            cmd_shutdown = "sudo shutdown -h now"
+            os.system(cmd_shutdown)
         else:
             pass
 
     def take_photo(self) -> None:
         photo_name = self.database.get_last_photo_name()
+        photo_name = "src/static/" + photo_name
         print("taking photo: " + photo_name)
 
-        # TODO
-        origin = 'src/static/example.png'
-        target = f'src/static/{photo_name}'
-        shutil.copyfile(origin, target)
+        sh_cmd_take_photo = f"/opt/vc/bin/raspistill --width 640 --height 480 -t 100 -o {photo_name}"
+        print(f"cmd to execute: {sh_cmd_take_photo}")
+        os.system(sh_cmd_take_photo)
 
         print("photo taken")
 
@@ -76,3 +79,4 @@ class Controller:
                timestamp=datetime.now())
 
         return tm
+
