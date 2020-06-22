@@ -47,9 +47,6 @@ class Controller:
             pass
         elif tc == "TURN OFF AIRFAN":
             pass
-        elif tc == "shutdown":
-            cmd_shutdown = "sudo shutdown -h now"
-            os.system(cmd_shutdown)
         else:
             pass
 
