@@ -1,5 +1,7 @@
 # sample-server
 
+To read more about the SAMPLE project, see [sample-main repository](https://github.com/Dinuirar/sample-main)  
+
 This server is intended to run on Raspberry Pi 4. It was tested on 64-bit Ubuntu 19, but I guess it would be easier to set up on 32-bit Raspbian ; )  
 If you want to use it on 64-bit Ubuntu 19:  
 - install *raspi-config* following the instructions from [FalcoGer's answer on askubuntu](https://askubuntu.com/questions/1130052/enable-i2c-on-raspberry-pi-ubuntu):
