@@ -22,7 +22,7 @@ pyrsistent==0.16.0
 pytz==2020.1
 requests==2.23.0
 six==1.14.0
-urllib3==1.25.8
+urllib3==1.26.5
 Werkzeug==0.16.1
 WTForms==2.2.1
 yarg==0.1.9
